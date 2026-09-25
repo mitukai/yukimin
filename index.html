@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowy Soft Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'snow-bg-1': '#E8F4F8',
+                        'snow-bg-2': '#F0F8FF',
+                        'ice-accent': '#7DD3FC',
+                        'frost-white': '#FFFFFF',
+                        'slate-frame': '#E2E8F0',
+                    },
+                    animation: {
+                        'ambient-float': 'ambientFloat 8s ease-in-out infinite',
+                        'ambient-pulse': 'ambientPulse 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        ambientFloat: {
+                            '0%, 100%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '50%': { transform: 'translate(15px, -20px) scale(1.08)' },
+                        },
+                        ambientPulse: {
+                            '0%, 100%': { opacity: '0.4' },
+                            '50%': { opacity: '0.75' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap');
+
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #E8F4F8 0%, #FFFFFF 30%, #F0F8FF 65%, #E8F4F8 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom ambient glowing scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(232, 244, 248, 0.4);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(125, 211, 252, 0.35);
+            border-radius: 9999px;
+            backdrop-filter: blur(6px);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(125, 211, 252, 0.65);
+        }
+
+        /* Scroll Reveal Element Initial State */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(60px) scale(0.96);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        /* Scroll Reveal Active State */
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Soft frost card with subtle inner & outer ice glows */
+        .grey-frame {
+            background: rgba(226, 232, 240, 0.85); /* #E2E8F0 soft grey */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 
+                0 20px 40px -15px rgba(186, 230, 253, 0.3),
+                0 0 30px 2px rgba(255, 255, 255, 0.9),
+                inset 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+
+        .grey-frame:hover {
+            box-shadow: 
+                0 30px 60px -12px rgba(125, 211, 252, 0.4),
+                0 0 40px 8px rgba(255, 255, 255, 0.95),
+                inset 0 0 25px rgba(255, 255, 255, 0.85);
+        }
+    </style>
+</head>
+<body class="min-h-screen relative text-slate-400 select-none antialiased overflow-y-auto">
+
+    <!-- Interactive Snow Canvas Overlay -->
+    <canvas id="snow-canvas" class="fixed inset-0 pointer-events-none z-20 w-full h-full"></canvas>
+
+    <!-- Soft dreamy ambient background glowing lights -->
+    <div class="fixed top-12 left-1/4 w-[32rem] h-[32rem] bg-sky-200/40 rounded-full filter blur-[140px] pointer-events-none animate-ambient-float"></div>
+    <div class="fixed bottom-1/4 right-10 w-[36rem] h-[36rem] bg-blue-100/50 rounded-full filter blur-[150px] pointer-events-none animate-ambient-float" style="animation-delay: -4s;"></div>
+    <div class="fixed top-2/3 left-10 w-[28rem] h-[28rem] bg-cyan-100/40 rounded-full filter blur-[130px] pointer-events-none animate-ambient-pulse"></div>
+
+    <!-- Gallery Container (strictly no text outside placeholder frames) -->
+    <main class="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 py-20 sm:py-32 flex flex-col gap-16 sm:gap-28">
+
+        <!-- Frame 1: Main Large Hero Frame -->
+        <section class="scroll-reveal w-full flex justify-center" data-delay="0">
+            <div class="grey-frame w-full max-w-4xl aspect-[16/9] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                <span class="text-gray-400/80 font-light tracking-[0.35em] text-sm sm:text-xl uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+            </div>
+        </section>
+
+        <!-- Frame 2 & 3: Staggered Two-Column Layout -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-14 items-center">
+            <div class="scroll-reveal w-full" data-delay="100">
+                <div class="grey-frame w-full aspect-[4/5] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs sm:text-base uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal w-full md:mt-24" data-delay="250">
+                <div class="grey-frame w-full aspect-[3/4] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs sm:text-base uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Frame 4: Wide Panoramic Frame -->
+        <section class="scroll-reveal w-full flex justify-center" data-delay="0">
+            <div class="grey-frame w-full aspect-[21/9] sm:aspect-[2.4/1] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs sm:text-lg uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+            </div>
+        </section>
+
+        <!-- Frame 5, 6, 7: Three Column Square Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+            <div class="scroll-reveal w-full" data-delay="100">
+                <div class="grey-frame w-full aspect-square rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal w-full" data-delay="200">
+                <div class="grey-frame w-full aspect-square rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal w-full" data-delay="300">
+                <div class="grey-frame w-full aspect-square rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Frame 8 & 9: Asymmetric Dual Layout -->
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="scroll-reveal md:col-span-7 w-full" data-delay="100">
+                <div class="grey-frame w-full aspect-[4/3] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs sm:text-base uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal md:col-span-5 w-full" data-delay="250">
+                <div class="grey-frame w-full aspect-[3/4] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-xs sm:text-base uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Frame 10: Centered Portrait Feature -->
+        <section class="scroll-reveal w-full flex justify-center" data-delay="0">
+            <div class="grey-frame w-full max-w-2xl aspect-[3/4] rounded-3xl sm:rounded-[2.5rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                <span class="text-gray-400/80 font-light tracking-[0.35em] text-sm sm:text-xl uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+            </div>
+        </section>
+
+        <!-- Frame 11-14: Four Small Quad Tiles -->
+        <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            <div class="scroll-reveal w-full" data-delay="50">
+                <div class="grey-frame w-full aspect-[4/5] rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-[10px] sm:text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal w-full" data-delay="150">
+                <div class="grey-frame w-full aspect-[4/5] rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-[10px] sm:text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal w-full" data-delay="250">
+                <div class="grey-frame w-full aspect-[4/5] rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-[10px] sm:text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+            <div class="scroll-reveal w-full" data-delay="350">
+                <div class="grey-frame w-full aspect-[4/5] rounded-2xl sm:rounded-3xl flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                    <span class="text-gray-400/80 font-light tracking-[0.35em] text-[10px] sm:text-xs uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Frame 15: Grand Finale Hero Frame -->
+        <section class="scroll-reveal w-full flex justify-center pb-16" data-delay="0">
+            <div class="grey-frame w-full max-w-5xl aspect-[16/10] rounded-3xl sm:rounded-[3rem] flex items-center justify-center transition-all duration-700 hover:-translate-y-2 group cursor-pointer">
+                <span class="text-gray-400/80 font-light tracking-[0.35em] text-base sm:text-2xl uppercase transition-all duration-500 group-hover:scale-110 group-hover:text-sky-400/90">image</span>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /*
+         * Interactive Snowfall Engine - Fast & Extra Large Crystal Snowflakes
+         */
+        (function initSnowEngine() {
+            const canvas = document.getElementById('snow-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = (canvas.width = window.innerWidth);
+            let height = (canvas.height = window.innerHeight);
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            let mouseX = -1000;
+            let mouseY = -1000;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            window.addEventListener('mouseleave', () => {
+                mouseX = -1000;
+                mouseY = -1000;
+            });
+
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    mouseX = e.touches[0].clientX;
+                    mouseY = e.touches[0].clientY;
+                }
+            }, { passive: true });
+
+            // 粒数を減らしてすっきり配置 (前回の約半分)
+            const particleCount = Math.floor(Math.min(width, 1600) / 48);
+            const snowflakes = [];
+
+            class Snowflake {
+                constructor() {
+                    this.reset(true);
+                }
+
+                reset(initial = false) {
+                    this.x = Math.random() * width;
+                    this.y = initial ? Math.random() * height : -60;
+                    
+                    // 前回の150%（1.5倍）の大きさ (10.5px ~ 22.5px)
+                    this.radius = Math.random() * 12 + 10.5;
+                    
+                    // スピーディーにスーッと落ちる速度 (1.2px ~ 2.8px/frame)
+                    this.speedY = Math.random() * 1.6 + 1.2;
+                    this.speedX = Math.random() * 0.4 - 0.2;
+                    this.opacity = Math.random() * 0.45 + 0.45;
+                    
+                    // スピードに合わせてゆらゆら感を微調整
+                    this.swingSpeed = Math.random() * 0.025 + 0.01;
+                    this.swingAngle = Math.random() * Math.PI * 2;
+                    this.swingWidth = Math.random() * 1.2 + 0.5;
+                    
+                    // 回転スピードも少し活発に
+                    this.rotation = Math.random() * Math.PI * 2;
+                    this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+                    
+                    this.designPattern = Math.floor(Math.random() * 3);
+                }
+
+                update() {
+                    this.swingAngle += this.swingSpeed;
+                    this.rotation += this.rotationSpeed;
+                    
+                    this.x += this.speedX + Math.sin(this.swingAngle) * this.swingWidth;
+                    this.y += this.speedY;
+
+                    // マウス散乱
+                    const dx = this.x - mouseX;
+                    const dy = this.y - mouseY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const maxDist = 180;
+
+                    if (dist < maxDist) {
+                        const force = (maxDist - dist) / maxDist;
+                        this.x += (dx / (dist || 1)) * force * 4.5;
+                        this.y += (dy / (dist || 1)) * force * 3.0;
+                    }
+
+                    if (this.y > height + 60 || this.x < -60 || this.x > width + 60) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation);
+
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    // サイズ拡大に合わせて線の太さと発光感をアップ
+                    ctx.lineWidth = 1.8;
+                    ctx.lineCap = 'round';
+                    
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
+
+                    const r = this.radius;
+
+                    for (let i = 0; i < 6; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(r, 0);
+                        ctx.stroke();
+
+                        const b1 = r * 0.45;
+                        const bLen1 = r * 0.3;
+                        ctx.beginPath();
+                        ctx.moveTo(b1, 0);
+                        ctx.lineTo(b1 + bLen1 * 0.4, -bLen1);
+                        ctx.moveTo(b1, 0);
+                        ctx.lineTo(b1 + bLen1 * 0.4, bLen1);
+                        ctx.stroke();
+
+                        if (this.designPattern >= 1) {
+                            const b2 = r * 0.75;
+                            const bLen2 = r * 0.22;
+                            ctx.beginPath();
+                            ctx.moveTo(b2, 0);
+                            ctx.lineTo(b2 + bLen2 * 0.4, -bLen2);
+                            ctx.moveTo(b2, 0);
+                            ctx.lineTo(b2 + bLen2 * 0.4, bLen2);
+                            ctx.stroke();
+                        }
+
+                        ctx.rotate(Math.PI / 3);
+                    }
+
+                    if (this.designPattern === 2) {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, r * 0.22, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                snowflakes.push(new Snowflake());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < snowflakes.length; i++) {
+                    snowflakes[i].update();
+                    snowflakes[i].draw();
+                }
+                requestAnimationFrame(animate);
+            }
+
+            window.onload = function() {
+                animate();
+            };
+        })();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -60px 0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const delay = parseInt(target.getAttribute('data-delay') || '0', 10);
+                        
+                        setTimeout(() => {
+                            target.classList.add('is-visible');
+                        }, delay);
+
+                        observer.unobserve(target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.scroll-reveal');
+            revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
