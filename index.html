@@ -387,6 +387,13 @@
             const imageElements = document.querySelectorAll('.random-gallery-img');
             const captionElements = document.querySelectorAll('.frame-caption');
 
+            if (galleryItems[index].position) {
+                // 指定があればその位置でトリミング
+                img.style.objectPosition = galleryItems[index].position;
+            } else {
+                // 指定がなければ中央に戻す（シャッフル対策）
+                img.style.objectPosition = "center";
+            }
             imageElements.forEach((img, index) => {
                 if (galleryItems[index]) {
                     img.src = galleryItems[index].url; // 画像をセット
