@@ -384,25 +384,30 @@
                 [galleryItems[i], galleryItems[j]] = [galleryItems[j], galleryItems[i]];
             }
 
-            // シャッフルされたデータを、HTMLの画像とキャプション（文字）に割り当てます
+// シャッフルされたデータを、HTMLの画像とキャプション（文字）に割り当てます
             const imageElements = document.querySelectorAll('.random-gallery-img');
             const captionElements = document.querySelectorAll('.frame-caption');
 
-            if (galleryItems[index].position) {
-                // 指定があればその位置でトリミング
-                img.style.objectPosition = galleryItems[index].position;
-            } else {
-                // 指定がなければ中央に戻す（シャッフル対策）
-                img.style.objectPosition = "center";
-            }
+            // ▼▼▼ ここからループの始まり ▼▼▼
             imageElements.forEach((img, index) => {
                 if (galleryItems[index]) {
                     img.src = galleryItems[index].url; // 画像をセット
+                    
+                    // 【修正】ここに位置指定のコードを入れます！
+                    if (galleryItems[index].position) {
+                        // 指定があればその位置でトリミング
+                        img.style.objectPosition = galleryItems[index].position;
+                    } else {
+                        // 指定がなければ中央に戻す（シャッフル対策）
+                        img.style.objectPosition = "center";
+                    }
+
                     if (captionElements[index]) {
                         captionElements[index].textContent = galleryItems[index].text; // 文字をセット
                     }
                 }
             });
+            // ▲▲▲ ループの終わり ▲▲▲
 
             // ==========================================
             // 写真ランダム配置の仕組み（ここまで）
